@@ -11,7 +11,7 @@ class CodeMaker
   
   def make_code
     puts "#{name} is making the code..." 
-    sleep 2
+    sleep 1
     @code = 4321
     puts "the code is now #{code} upon make_code method"
   end
@@ -19,35 +19,42 @@ end
 
 class CodeBreaker
 
-  attr_accessor :name
+  attr_accessor :name 
 
   def initialize(name)
     @name = name
     puts "the code breaker is #{name}!"
   end
 
-  def break_code(guess)
-    # code
+  def break_code
+    puts "CodeBreaker, enter your guess"
+    guess = gets.chomp
     puts "the code breaker's guess is #{guess}!"
+    guess
   end
 end
 
 class Mastermind 
 
+  attr_accessor :codepegs, :keypegs
+
   def initialize(player, cpu) # passing in objects
-    @codepeg1 = 1
-    @codepeg2 = 2
-    @codepeg3 = 3
-    @codepeg4 = 4
+    @codepegs = [nil, nil, nil, nil]
     @keypegs = [nil, nil, nil, nil]
     @player = player
     @cpu = cpu
   end
   
+  def change_board(code_guess)
+    self.codepegs = code_guess.to_s.split('').map(&:to_i)
+    show_board
+  end
+
+
   def show_board
     puts "
     ________________________
-    1- #{@codepeg1}-#{@codepeg2}-#{@codepeg3}-#{@codepeg4}-[][][][]
+    1- #{@codepegs[0]}-#{@codepegs[1]}-#{@codepegs[2]}-#{@codepegs[3]}-[][][][]
     ________________________
     02- _________________
     ________________________
@@ -69,11 +76,11 @@ end # class end
 
 player = CodeBreaker.new("Tygh")
 cpu = CodeMaker.new("Tygh's Laptop")
-sleep 2
+sleep 1
 cpu.make_code
 newGame = Mastermind.new(player, cpu)
 newGame.show_board
-
+newGame.change_board(player.break_code())
 
 # Classes: Player, Computer, Mastermind
 
