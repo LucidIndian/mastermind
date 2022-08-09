@@ -1,27 +1,35 @@
 class CodeMaker
   
-  attr_accessor :code, :name
+  attr_accessor :name
 
   def initialize(name)
     @name = name
-    puts "the code maker is #{name}!"
+    puts "The code maker is #{name}!"
+  end
+
+  def make_code
+    puts "#{cpu} is making the code..." 
+    sleep 2
+    @code = 4321
+    puts "the code is now #{code} at the make_code method"
+    show_board
   end
   
 end
 
 class CodeBreaker
 
-  attr_accessor :name 
+  attr_accessor :name
 
   def initialize(name)
     @name = name
-    puts "the code breaker is #{name}!"
+    puts "The code breaker is #{name}!"
   end
 
   def break_code
-    puts "CodeBreaker, enter your guess"
+    puts "Code Breaker, enter your guess"
     guess = gets.chomp
-    puts "the code breaker's guess is #{guess}!"
+    puts "The #{self.name}'s guess is #{guess}!"
     guess
   end
 end
@@ -66,23 +74,44 @@ class Mastermind
     @player = player
     @cpu = cpu
     @winner = false
-    @round = 0
+    @round = 1
     @code = nil
   end
+
+  def change_board(code_guess = player.break_code)
   
-  def make_code
-    puts "#{cpu} is making the code..." 
-    sleep 2
-    @code = 4321
-    puts "the code is now #{code} at the make_code method"
+    case round
+    when 0
+    when 1
+      self.codepegs1 = code_guess.to_s.split('').map(&:to_i)
+    when 2
+      self.codepegs2 = code_guess.to_s.split('').map(&:to_i)
+    when 3
+      self.codepegs3 = code_guess.to_s.split('').map(&:to_i)
+    when 4
+      self.codepegs4 = code_guess.to_s.split('').map(&:to_i)
+    when 5
+      self.codepegs5 = code_guess.to_s.split('').map(&:to_i)
+    when 6
+      self.codepegs6 = code_guess.to_s.split('').map(&:to_i)
+    when 7
+      self.codepegs7 = code_guess.to_s.split('').map(&:to_i)
+    when 8
+      self.codepegs8 = code_guess.to_s.split('').map(&:to_i)
+    when 9
+      self.codepegs9 = code_guess.to_s.split('').map(&:to_i)
+    when 10
+      self.codepegs10 = code_guess.to_s.split('').map(&:to_i)
+    when 11
+      self.codepegs11 = code_guess.to_s.split('').map(&:to_i)
+    when 12
+      self.codepegs12 = code_guess.to_s.split('').map(&:to_i)
+    else
+      puts "Something wrong with the round variable"
+    end
     show_board
+    winner_check
   end
-
-  def change_board(code_guess)
-    self.codepegs1 = code_guess.to_s.split('').map(&:to_i)
-    show_board
-  end
-
 
   def show_board
     puts "
@@ -93,41 +122,53 @@ class Mastermind
     ________________________
     03- #{@codepegs3[0]}-#{@codepegs3[1]}-#{@codepegs3[2]}-#{@codepegs3[3]}-[][][][]
     ________________________
-    04- _________________
-    05- _________________
-    06- _________________
-    07- _________________
-    08- _________________
-    09- _________________
-    10- _________________
-    11- _________________
-    12- _________________
+    04- #{@codepegs4[0]}-#{@codepegs4[1]}-#{@codepegs4[2]}-#{@codepegs4[3]}-[][][][]
+    ________________________
+    05- #{@codepegs5[0]}-#{@codepegs5[1]}-#{@codepegs5[2]}-#{@codepegs5[3]}-[][][][]
+    ________________________
+    06- #{@codepegs6[0]}-#{@codepegs6[1]}-#{@codepegs6[2]}-#{@codepegs6[3]}-[][][][]
+    ________________________
+    07- #{@codepegs7[0]}-#{@codepegs7[1]}-#{@codepegs7[2]}-#{@codepegs7[3]}-[][][][]
+    ________________________
+    08- #{@codepegs8[0]}-#{@codepegs8[1]}-#{@codepegs8[2]}-#{@codepegs8[3]}-[][][][]
+    ________________________
+    09- #{@codepegs9[0]}-#{@codepegs9[1]}-#{@codepegs9[2]}-#{@codepegs9[3]}-[][][][]
+    ________________________
+    10- #{@codepegs10[0]}-#{@codepegs10[1]}-#{@codepegs10[2]}-#{@codepegs10[3]}-[][][][]
+    ________________________
+    11- #{@codepegs11[0]}-#{@codepegs11[1]}-#{@codepegs11[2]}-#{@codepegs11[3]}-[][][][]
+    ________________________
+    12- #{@codepegs12[0]}-#{@codepegs12[1]}-#{@codepegs12[2]}-#{@codepegs12[3]}-[][][][]
     "
-
-    winner_check
-
   end
 
   def winner_check
     if code == codepegs1
     winner = true
+    puts "there's a winner!!!!"
     else
      # nada
     end
     # increment round since now winner
     # write code to end the game if round = 12
     self.round += 1
+    while round == 13 do
+      puts "GAME OVER" # sensing no more gusses left
+      return # break loop
+    end
+    change_board # keep playing!
   end
-
 end # class end
 
+
+# GAME START SEQUENCE
 player = CodeBreaker.new("Tygh")
 cpu = CodeMaker.new("Tygh's Laptop")
 sleep 1
 newGame = Mastermind.new(player, cpu)
+
 newGame.show_board
-current_guess = player.break_code
-newGame.change_board(current_guess)
+newGame.change_board
 
 # Classes: Player, Computer, Mastermind
 
