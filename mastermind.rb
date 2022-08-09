@@ -162,11 +162,22 @@ end # class end
 
 
 # GAME START SEQUENCE
-player = CodeBreaker.new("Tygh")
+puts "
+\
+Hello and welcome to Tygh's Mastermind game!"
+puts "The computer will be the Code Maker and YOU will be the Code Breaker"
+sleep 1
+puts "Player, please type your name then hit return."
+player_name = gets.chomp
+sleep 1
+player = CodeBreaker.new(player_name)
+puts "Initializing your opponent..."
 cpu = CodeMaker.new("Tygh's Laptop")
 sleep 1
-newGame = Mastermind.new(player, cpu)
+puts "OK, it's #{player.name} vs. #{cpu.name}, let's do this!"
+sleep 1
 
+newGame = Mastermind.new(player, cpu)
 newGame.show_board
 newGame.change_board
 
