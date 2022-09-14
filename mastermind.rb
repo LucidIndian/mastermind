@@ -1,41 +1,33 @@
 class CodeMaker
-  
-  attr_accessor :name
-
+  attr_accessor :name 
   def initialize(name)
     @name = name
     puts "The code maker is #{name}!"
   end
-
   def make_code
-    puts "#{cpu} is making the code..." 
+    puts "#{self.name} is making the code..." 
     sleep 2
     @code = 4321
-    puts "the code is now #{code} at the make_code method"
-    show_board
+    puts "the code is now #{@code} via the make_code method"
+    @code # so it returns the code value
   end
-  
 end
 
 class CodeBreaker
-
   attr_accessor :name
-
   def initialize(name)
     @name = name
     puts "The code breaker is #{name}!"
   end
-
   def break_code
     puts "Code Breaker, enter your guess"
-    guess = gets.chomp
+    guess = gets.chomp.to_i # to integer for the comparison to the code, later
     puts "The #{self.name}'s guess is #{guess}!"
     guess
   end
 end
 
 class Mastermind
-
   attr_accessor :codepegs1, :codepegs2, :codepegs3, 
   :codepegs4, :codepegs5, :codepegs6, 
   :codepegs7, :codepegs8, :codepegs9,
@@ -46,7 +38,7 @@ class Mastermind
   :keypegs10, :keypegs11, :keypegs12,
   :winner, :round, :code, :player, :cpu
 
-  def initialize(player, cpu) # passing in objects
+  def initialize(player, cpu, code) # passing in player and cpu objects
     @codepegs1 = [nil, nil, nil, nil]
     @codepegs2 = [nil, nil, nil, nil]
     @codepegs3 = [nil, nil, nil, nil]
@@ -73,15 +65,13 @@ class Mastermind
     @keypegs12 = [nil, nil, nil, nil]
     @player = player
     @cpu = cpu
+    @code = code
     @winner = false
-    @round = 1
-    @code = nil
+    @round = 1 # To increment the guess in each row
   end
 
-  def change_board(code_guess = player.break_code)
-  
+  def change_board(code_guess = player.break_code) # calling the break code method and using it in the change board method
     case round
-    when 0
     when 1
       self.codepegs1 = code_guess.to_s.split('').map(&:to_i)
     when 2
@@ -107,15 +97,14 @@ class Mastermind
     when 12
       self.codepegs12 = code_guess.to_s.split('').map(&:to_i)
     else
-      puts "Something wrong with the round variable"
+      puts "Something wrong with the `round` variable"
     end
     show_board
-    winner_check
+    winner_check(code_guess)
   end
 
   def show_board
-    puts "
-    ________________________
+    puts "________________________
     01- #{@codepegs1[0]}-#{@codepegs1[1]}-#{@codepegs1[2]}-#{@codepegs1[3]}-[][][][]
     ________________________
     02- #{@codepegs2[0]}-#{@codepegs2[1]}-#{@codepegs2[2]}-#{@codepegs2[3]}-[][][][]
@@ -142,15 +131,19 @@ class Mastermind
     "
   end
 
-  def winner_check
-    if code == codepegs1
-    winner = true
-    puts "there's a winner!!!!"
+  def winner_check(code_guess)
+    puts "Winner checking running..."
+    puts "The code is #{@code} and the guess is #{code_guess}"
+    puts "The class of the code guess is #{code_guess.class}"
+    puts "The class of the code is #{code.class}"
+    if @code == code_guess
+      winner = true
+      puts "there's a winner!!!!"
+      return # break loop
     else
-     # nada
+      # nada
     end
-    # increment round since now winner
-    # write code to end the game if round = 12
+    # increment round since no winner
     self.round += 1
     while round == 13 do
       puts "GAME OVER" # sensing no more gusses left
@@ -159,7 +152,6 @@ class Mastermind
     change_board # keep playing!
   end
 end # class end
-
 
 # GAME START SEQUENCE
 puts "
@@ -170,20 +162,18 @@ sleep 1
 puts "Player, please type your name then hit return."
 player_name = gets.chomp
 sleep 1
-player = CodeBreaker.new(player_name)
+player = CodeBreaker.new(player_name) # create player object
 puts "Initializing your opponent..."
-cpu = CodeMaker.new("Tygh's Laptop")
+cpu = CodeMaker.new("Tygh's Laptop") # create cpu object
 sleep 1
 puts "OK, it's #{player.name} vs. #{cpu.name}, let's do this!"
 sleep 1
+code = cpu.make_code # makes the code!
+puts "The code is ready..."
 
-newGame = Mastermind.new(player, cpu)
+newGame = Mastermind.new(player, cpu, code)
 newGame.show_board
 newGame.change_board
-
-# Classes: Player, Computer, Mastermind
-
-# Player vs. computer
 
 # - 12 turns to guess the secret code, starting with you guessing the computer’s random code.
 # - Later, refactor your code to allow the human player to choose whether they want to be the creator of the secret code or the guesser.
@@ -197,13 +187,11 @@ newGame.change_board
 # Mastermind methods
 	
 # 	play:
-
 # - The codemaker chooses a pattern of four code pegs (of six different colors). Players decide in advance whether duplicates and blanks are allowed.
 # - codemaker chooses pattern (not visible to codebreaker)
 # - The codebreaker tries to guess the pattern, in both order and color, within eight to twelve turns.
 # - guesses and feedback continue to alternate until either the codebreaker guesses correctly, or all rows on the decoding board are full.
 # - scoring: "The codemaker gets one point for each guess the codebreaker makes. An extra point is earned by the codemaker if the codebreaker is unable to guess the exact pattern within the given number of turns.
 # - winner_check: "The winner is the one who has the most points after the agreed-upon number of games are played.
-
 
 # display board (inspo: https://en.wikipedia.org/wiki/Mastermind_(board_game)#/media/File:Mastermind.jpg)
