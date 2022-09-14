@@ -9,8 +9,8 @@ Project Goal
 How to Use the Project
 
 - Run code in IRB
-- Run from the command line:  $ ruby mastermind.rb 
+- Run file from the command line:  $ ruby mastermind.rb 
 - Paste code with Replit
 
 
-By @TyghWalters - Aug 2022
+By @TyghWalters - Aug-Sept 2022

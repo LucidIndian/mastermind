@@ -133,12 +133,9 @@ class Mastermind
 
   def winner_check(code_guess)
     puts "Winner checking running..."
-    puts "The code is #{@code} and the guess is #{code_guess}"
-    puts "The class of the code guess is #{code_guess.class}"
-    puts "The class of the code is #{code.class}"
     if @code == code_guess
       winner = true
-      puts "there's a winner!!!!"
+      puts "Correct! The Code Breaker Wins!!!"
       return # break loop
     else
       # nada
@@ -146,7 +143,7 @@ class Mastermind
     # increment round since no winner
     self.round += 1
     while round == 13 do
-      puts "GAME OVER" # sensing no more gusses left
+      puts "GAME OVER, The Code Maker Wins!!!" # sensing no more gusses left
       return # break loop
     end
     change_board # keep playing!
@@ -159,7 +156,7 @@ puts "
 Hello and welcome to Tygh's Mastermind game!"
 puts "The computer will be the Code Maker and YOU will be the Code Breaker"
 sleep 1
-puts "Player, please type your name then hit return."
+puts "Code Breaker, please type your name then hit return."
 player_name = gets.chomp
 sleep 1
 player = CodeBreaker.new(player_name) # create player object
@@ -167,8 +164,8 @@ puts "Initializing your opponent..."
 cpu = CodeMaker.new("Tygh's Laptop") # create cpu object
 sleep 1
 puts "OK, it's #{player.name} vs. #{cpu.name}, let's do this!"
-sleep 1
 code = cpu.make_code # makes the code!
+sleep 1
 puts "The code is ready..."
 
 newGame = Mastermind.new(player, cpu, code)
