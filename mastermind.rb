@@ -7,7 +7,7 @@ class CodeMaker
   def make_code
     puts "#{self.name} is making the code..." 
     sleep 2
-    @code = 4321
+    @code = 4421
     puts "the code is now #{@code} via the make_code method"
     @code # so it returns the code value
   end
@@ -39,30 +39,30 @@ class Mastermind
   :winner, :round, :code, :player, :cpu
 
   def initialize(player, cpu, code) # passing in player and cpu objects
-    @codepegs1 = []
-    @codepegs2 = []
-    @codepegs3 = []
-    @codepegs4 = []
-    @codepegs5 = []
-    @codepegs6 = []
-    @codepegs7 = []
-    @codepegs8 = []
-    @codepegs9 = []
-    @codepegs10 = []
-    @codepegs11 = []
-    @codepegs12 = []
-    @keypegs1 = []
-    @keypegs2 = []
-    @keypegs3 = []
-    @keypegs4 = []
-    @keypegs5 = []
-    @keypegs6 = []
-    @keypegs7 = []
-    @keypegs8 = []
-    @keypegs9 = []
-    @keypegs10 = []
-    @keypegs11 = []
-    @keypegs12 = []
+    @codepegs1
+    @codepegs2
+    @codepegs3
+    @codepegs4
+    @codepegs5
+    @codepegs6
+    @codepegs7
+    @codepegs8
+    @codepegs9
+    @codepegs10
+    @codepegs11
+    @codepegs12
+    @keypegs1
+    @keypegs2
+    @keypegs3
+    @keypegs4
+    @keypegs5
+    @keypegs6
+    @keypegs7
+    @keypegs8
+    @keypegs9
+    @keypegs10
+    @keypegs11
+    @keypegs12
     @player = player
     @cpu = cpu
     @code = code
@@ -156,22 +156,61 @@ class Mastermind
     code_array = @code.to_s.split('').map(&:to_i)
     puts "code_guess_array is #{code_guess_array}"
     puts "code_array is #{code_array}"
-    # if the first # of code_guess_array matches the first # of code_array, then print "!" = correct # and order!
-    # elsif the first # of code_guess_array mathes any other # in code_array, then print "X" = correct # but wrong order
-    # else then print "O" = miss
-    # repeat for all
-      # NOTE: If there are duplicate colors in the guess, 
+    # "!" = correct number and order!
+    # "X" = correct # but wrong order
+    # "O" = miss
+      # NOTE: If there are duplicates in the guess, 
       # they cannot all be awarded a key peg unless 
-      # they correspond to the same number of duplicate colors in the hidden code. 
+      # they correspond to the same number of duplicates in the code. 
+    
+    # DETERMINE HOW MANY TIMES A NUMBER APPEARS IN THE CODE 
+    # nested array - then create it with a iterating loop
+    
+    # "omits the second optional argument and 
+    # instead passes in the mutable value in a block."
+    code_num_frequency = Array.new(9) {Array.new(2)}
+
+    # add the number to each 1st position
+    for i in 0..8 do
+      code_num_frequency[i][0] = i+1
+    end
+    # then add the number to each 2nd position to finish the 
+    # code_num_frequency nested array to regulate the keypegs
+    for i in 0..8 do
+      code_num_frequency[i][1] = code_array.count(i+1)
+    end
+    puts "TEST: code_num_frequency is #{code_num_frequency}" # test
+
+    
+    # establish nested array of number of keypegs to code frequency
+    peg_num_frequency = Array.new(9) {Array.new(2, 0)} # add a zero to each 2nd position
+    # add the number to each 1st position
+    for i in 0..8 do
+      peg_num_frequency[i][0] = i+1
+    end
+    
+    # need to check all spots first to avoid excluding a correct guess
     keypeg_array = code_guess_array.map.with_index do |number, index|
       if number == code_array[index]
+        peg_num_frequency[number-1][1] = 1 + (peg_num_frequency[number-1][1]) # marking a direct hit
         "!"
-      elsif code_array.include? code_guess_array[index]
-        "X"
       else
-        "O"
+        "0"
       end
     end
+
+    puts "TEST: peg_num_frequency is #{peg_num_frequency}" # test
+
+
+    # keypeg_array = code_guess_array.map.with_index do |number, index|
+    #   if code_array.include? number AND # there are unclaimed guesses remaining
+    #     "X"
+    #   else
+    #     "O"
+    #   end
+    # end
+
+
     puts "keypeg_array is #{keypeg_array}"
     keypeg_array.join("")
   end
