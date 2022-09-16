@@ -118,7 +118,7 @@ class Mastermind
   end
 
   def show_board
-    puts "--  Code  -  Keys"
+    puts "-- Code -  Keys"
     puts "01- #{@codepegs1} - #{@keypegs1}"
     puts "02- #{@codepegs2} - #{@keypegs2}"
     puts "03- #{@codepegs3} - #{@keypegs3}"
@@ -189,29 +189,34 @@ class Mastermind
       peg_num_frequency[i][0] = i+1
     end
     
-    # need to check all spots first to avoid excluding a correct guess
-    keypeg_array = code_guess_array.map.with_index do |number, index|
-      if number == code_array[index]
-        peg_num_frequency[number-1][1] = 1 + (peg_num_frequency[number-1][1]) # marking a direct hit
+    # first, need to check all spots first to avoid excluding an exact match "!"
+    keypeg_array = code_guess_array.map.with_index do |guess, index|
+      if guess == code_array[index]
+        peg_num_frequency[guess-1][1] = 1 + (peg_num_frequency[guess-1][1]) # marking a direct hit
         "!"
       else
         "0"
       end
     end
 
+    puts "keypeg_array 1st is #{keypeg_array}"
     puts "TEST: peg_num_frequency is #{peg_num_frequency}" # test
 
+    # second, need to check remaining spots for inexact matches "X"
+    keypeg_array = code_guess_array.map.with_index do |guess, index|
+      if keypeg_array[index] == "!"
+        "!" # make it the same
+      elsif code_array.include?(guess) && (peg_num_frequency[guess-1][1]) < (code_num_frequency[guess-1][1]) # there are unclaimed guesses remaining
+        # add to the counter
+        peg_num_frequency[guess-1][1] = 1 + (peg_num_frequency[guess-1][1]) # marking an indirect hit
+        # then assign the mark
+        "X"
+      else
+        "0"
+      end
+    end
 
-    # keypeg_array = code_guess_array.map.with_index do |number, index|
-    #   if code_array.include? number AND # there are unclaimed guesses remaining
-    #     "X"
-    #   else
-    #     "O"
-    #   end
-    # end
-
-
-    puts "keypeg_array is #{keypeg_array}"
+    puts "keypeg_array now is #{keypeg_array}"
     keypeg_array.join("")
   end
 
