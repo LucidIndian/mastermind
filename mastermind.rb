@@ -1,15 +1,24 @@
 class CodeMaker
-  attr_accessor :name 
+  attr_accessor :name
+
   def initialize(name)
     @name = name
-    puts "The code maker is #{name}!"
+    puts "The Code Maker is #{name}!"
   end
-  def make_code
-    puts "#{self.name} is making the code..." 
-    sleep 1
-    @code = rand(0..9).to_s + rand(0..9).to_s + rand(0..9).to_s + rand(0..9).to_s
-    @code = @code.to_i
 
+  def make_code
+    puts "#{self.name} is making the code..."
+    sleep 1
+    # for CPU make_code
+    if self.name == "Tygh's Laptop"
+      puts "#{self.name}, please enter your secret code, 4 digits between 0-9"
+      @code = rand(0..9).to_s + rand(0..9).to_s + rand(0..9).to_s + rand(0..9).to_s
+      @code = @code.to_i
+     # for player to make_code
+    else 
+      puts "#{self.name}, please enter your secret code, 4 digits between 0-9"
+      @code = gets.chomp
+    end
     puts "The code is now #{@code} via the make_code method" # test
     @code # so it returns the code value
   end
@@ -17,30 +26,41 @@ end
 
 class CodeBreaker
   attr_accessor :name
+
   def initialize(name)
     @name = name
     puts "The Code Breaker is #{name}!"
   end
+
   def break_code
-    puts "Code Breaker, enter your guess"
-    guess = gets.chomp.to_i # to integer for the comparison to the code, later
+     # for CPU to guess - right now each guess is totally random
+     if self.name == "Tygh's Laptop"
+      puts "#{self.name} is thinking of it's guess..."
+      sleep 1
+      guess = rand(0..9).to_s + rand(0..9).to_s + rand(0..9).to_s + rand(0..9).to_s
+      guess = guess.to_i
+     # for player to make_code
+    else 
+      puts "#{self.name}, enter your guess, 4 digits between 0-9"
+      guess = gets.chomp.to_i # to integer for the comparison to the code, later
+    end
     puts "The #{self.name}'s guess is #{guess}!"
     guess
   end
 end
 
 class Mastermind
-  attr_accessor :codepegs1, :codepegs2, :codepegs3, 
-  :codepegs4, :codepegs5, :codepegs6, 
+  attr_accessor :codepegs1, :codepegs2, :codepegs3,
+  :codepegs4, :codepegs5, :codepegs6,
   :codepegs7, :codepegs8, :codepegs9,
   :codepegs10, :codepegs11, :codepegs12,
   :keypegs1, :keypegs2, :keypegs3, 
   :keypegs4, :keypegs5, :keypegs6, 
   :keypegs7, :keypegs8, :keypegs9,
   :keypegs10, :keypegs11, :keypegs12,
-  :winner, :round, :code, :player, :cpu
+  :winner, :round, :code, :code_maker, :code_breaker
 
-  def initialize(player, cpu, code) # passing in player and cpu objects
+  def initialize(code_maker, code_breaker, code) # passing in player and cpu objects
     @codepegs1
     @codepegs2
     @codepegs3
@@ -65,14 +85,14 @@ class Mastermind
     @keypegs10
     @keypegs11
     @keypegs12
-    @player = player
-    @cpu = cpu
+    @code_breaker = code_breaker
+    @code_maker = code_maker
     @code = code
     @winner = false
     @round = 1 # To increment the guess in each row
   end
 
-  def change_board(code_guess = player.break_code) # calling the break code method and using it in the change board method
+  def change_board(code_guess = code_breaker.break_code) # calling the break code method and using it in the change board method
     pegs = keypeg_calc(code_guess)
     case round
     when 1
@@ -142,8 +162,7 @@ class Mastermind
     else
       # nada
     end
-    # increment round since no winner
-    self.round += 1
+    self.round += 1 # increment round since no winner
     while round == 13 do
       puts "GAME OVER, The Code Maker Wins!!!" # sensing no more guesses left
       return # break loop
@@ -207,19 +226,25 @@ end # class end
 puts "
 \
 Hello and welcome to Tygh's Mastermind game!"
-puts "The computer will be the Code Maker and YOU will be the Code Breaker"
-sleep 1
-puts "Code Breaker, please type your name then hit return."
+puts "Player, please type your name then hit return."
 player_name = gets.chomp
 sleep 1
-player = CodeBreaker.new(player_name) # create player object
-puts "Initializing your opponent..."
+puts "Hello, #{player_name}, do you want to be the Code Breaker? Enter: Y / N"
+role_decision = gets.chomp # a Y or N
 sleep 1
-cpu = CodeMaker.new("Tygh's Laptop") # create cpu object
-code = cpu.make_code # makes the code!
-puts "OK, it's #{player.name} vs. #{cpu.name}, let's do this!"
 
-newGame = Mastermind.new(player, cpu, code)
+if role_decision == "Y"
+  code_breaker = CodeBreaker.new(player_name) # create code_breaker object
+  code_maker = CodeMaker.new("Tygh's Laptop") # create code_maker object
+elsif role_decision == "N"
+  code_breaker = CodeBreaker.new("Tygh's Laptop") # create code_breaker object
+  code_maker = CodeMaker.new(player_name) # create code_maker object
+else
+  puts "ERROR with role_decision"
+end
+code = code_maker.make_code # makes the code!
+puts "OK, it's #{code_breaker.name} vs. #{code_maker.name}, let's do this!"
+newGame = Mastermind.new(code_maker, code_breaker, code)
 # newGame.show_board
 newGame.change_board
 
