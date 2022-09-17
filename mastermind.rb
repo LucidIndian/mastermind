@@ -19,7 +19,7 @@ class CodeMaker
       puts "#{self.name}, please enter your secret code, 4 digits between 0-9"
       @code = gets.chomp
     end
-    puts "The code is now #{@code} via the make_code method" # test
+    # puts "The code is now #{@code} via the make_code method" # test
     @code # so it returns the code value
   end
 end
@@ -139,7 +139,7 @@ class Mastermind
   end
 
   def show_board
-    puts "##- Guess - Keypegs !=exact, X=inexact, 0=miss"
+    puts `##- Guess - Keypegs !=exact, X=inexact, 0=miss`
     puts "01- #{@codepegs1} - #{@keypegs1}"
     puts "02- #{@codepegs2} - #{@keypegs2}"
     puts "03- #{@codepegs3} - #{@keypegs3}"
@@ -206,9 +206,9 @@ class Mastermind
     end
     # second, need to check remaining spots for inexact matches "X"
     keypeg_array = code_guess_array.map.with_index do |guess, index|
-      if keypeg_array[index] == "!"
+      if keypeg_array[index] == '!'
         "!" # make it the same
-      elsif code_array.include?(guess) && (peg_num_frequency[guess-1][1]) < (code_num_frequency[guess-1][1]) # there are unclaimed guesses remaining
+      elsif code_array.include?(guess) && (peg_num_frequency[guess - 1][1]) < (code_num_frequency[guess - 1][1]) # there are unclaimed guesses remaining
         # add to the counter
         peg_num_frequency[guess-1][1] += 1 # marking an indirect hit
         "X" # then assign the mark
@@ -247,23 +247,3 @@ puts "OK, it's #{code_breaker.name} vs. #{code_maker.name}, let's do this!"
 newGame = Mastermind.new(code_maker, code_breaker, code)
 # newGame.show_board
 newGame.change_board
-
-# - 12 turns to guess the secret code, starting with you guessing the computer’s random code.
-# - Later, refactor your code to allow the human player to choose whether they want to be the creator of the secret code or the guesser.
-
-# Classes
-# - Mastermind
-# - Player < codemaker
-# - Player < codebreaker
-
-# Mastermind methods
-	
-# 	play:
-# - The codemaker chooses a pattern of four code pegs (of six different colors). Players decide in advance whether duplicates and blanks are allowed.
-# - codemaker chooses pattern (not visible to codebreaker)
-# - The codebreaker tries to guess the pattern, in both order and color, within eight to twelve turns.
-# - guesses and feedback continue to alternate until either the codebreaker guesses correctly, or all rows on the decoding board are full.
-# - scoring: "The codemaker gets one point for each guess the codebreaker makes. An extra point is earned by the codemaker if the codebreaker is unable to guess the exact pattern within the given number of turns.
-# - winner_check: "The winner is the one who has the most points after the agreed-upon number of games are played.
-
-# display board (inspo: https://en.wikipedia.org/wiki/Mastermind_(board_game)#/media/File:Mastermind.jpg)
