@@ -139,7 +139,7 @@ class Mastermind
   end
 
   def show_board
-    puts `##- Guess - Keypegs !=exact, X=inexact, 0=miss`
+    puts '##- Guess - Keypegs (!=exact, X=inexact, O=miss)'
     puts "01- #{@codepegs1} - #{@keypegs1}"
     puts "02- #{@codepegs2} - #{@keypegs2}"
     puts "03- #{@codepegs3} - #{@keypegs3}"
@@ -213,7 +213,7 @@ class Mastermind
         peg_num_frequency[guess-1][1] += 1 # marking an indirect hit
         "X" # then assign the mark
       else
-        "0" # miss
+        "O" # miss
       end
     end
     keypeg_array.join("")
