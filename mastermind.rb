@@ -44,7 +44,7 @@ class CodeBreaker
       puts "#{self.name}, enter your guess, 4 digits between 0-9"
       guess = gets.chomp.to_i # to integer for the comparison to the code, later
     end
-    puts "The #{self.name}'s guess is #{guess}!"
+    puts "#{self.name}'s guess is #{guess}!"
     guess
   end
 end
@@ -216,7 +216,6 @@ class Mastermind
         "0" # miss
       end
     end
-    puts "keypeg_array now is #{keypeg_array}"
     keypeg_array.join("")
   end
 
