@@ -7,7 +7,9 @@ class CodeMaker
   def make_code
     puts "#{self.name} is making the code..." 
     sleep 1
-    @code = 4421
+    @code = rand(0..9).to_s + rand(0..9).to_s + rand(0..9).to_s + rand(0..9).to_s
+    @code = @code.to_i
+
     puts "The code is now #{@code} via the make_code method" # test
     @code # so it returns the code value
   end
@@ -117,7 +119,7 @@ class Mastermind
   end
 
   def show_board
-    puts "-- Code - Keypegs (! = exact, X = inexact, 0 = miss)"
+    puts "##- Guess - Keypegs !=exact, X=inexact, 0=miss"
     puts "01- #{@codepegs1} - #{@keypegs1}"
     puts "02- #{@codepegs2} - #{@keypegs2}"
     puts "03- #{@codepegs3} - #{@keypegs3}"
